@@ -1,4 +1,6 @@
 ## Introduction
+
+[![Join the chat at https://gitter.im/init-koa2/Lobby](https://badges.gitter.im/init-koa2/Lobby.svg)](https://gitter.im/init-koa2/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 `init-koa2` is a WIP effort to automate the process of developing a new project with Koa2.
 
 Usually when starting a new Koa app, you'll go through the regular routine
