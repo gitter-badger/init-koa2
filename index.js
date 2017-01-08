@@ -1,97 +1,83 @@
 const shell = require('shelljs');
 const Koa = require('koa');
 const chalk = require('chalk');
+const packageJson = require('read-pkg');
+require('./modules/reporter');
+const statik = require('./modules/static');
 
 class In1tKoa2 {
-  // defaults:
-  constructor({
-    port = 3000,
-    logging = 1,
-    useStaticFiles = 1,
-    useEslint = 0,
-    useBunyanLogger = 1,
-    useBodyParser = 1,
-    useKoaRouter = 1,
-    useGraphServerKoa = 0,
-    useReact = 0
-  }) {
-    this.port = port;
-    this.logging = logging;
-    this.useStaticFiles = useStaticFiles;
-    this.useEslint = useEslint;
-    this.useBunyanLogger = useBunyanLogger;
-    this.useBodyParser = useBodyParser;
-    this.useKoaRouter = useKoaRouter;
-    this.useGraphServerKoa = useGraphServerKoa;
-    this.useReact = useReact;
-    if (this.logging) {
-      const badge = chalk.green('\n=== [[[ In1t ]]] ===\n');
-      console.log(badge);
+  constructor({ port, logging, useStaticFiles, useEslint, useBunyanLogger, useBodyParser, useKoaRouter, useGraphServerKoa, useReact }) {
+    this.port = port || 3000;
+    this.logging = logging || true;
+    this.useStaticFiles = useStaticFiles || { dir: 'public', maxage: 0, hidden: false, index: 'index.json' };
+    this.useBodyParser = useBodyParser || {enableTypes: [ 'json' ],encode: 'utf8',jsonLimit: '1mb',strict: 'true'};
+    this.useEslint = useEslint || true;
+    this.useBunyanLogger = useBunyanLogger || true;
+    this.useKoaRouter = useKoaRouter || true;
+    this.useGraphServerKoa = useGraphServerKoa || false;
+    this.useReact = useReact || true;
+
+    try {
+      this.package = packageJson.sync();
+    } catch (err) {
+      this.error({message: `
+        ------------------------------------------------------------------------
+        Couldn't find package.json in your project! Please make sure to have one
+        in the root of your project.
+
+        You can use '$ npm init .' command to create one interactively.
+        ------------------------------------------------------------------------
+        `});
+      shell.exit(1);
     }
   }
-
-  success({ message }) {
-    if (this.logging) {
-      process.stdout.write(chalk.blue(`-> ${message}\n`));
-    }
+  reportAppHaveStarted() {
+    const badge = chalk.green(`
+      === [[[ ${this.package.name} ]]] ===\n
+    `);
+    const url = chalk.blue(`
+      app is running on port: ${this.port}
+      -> localhost:${this.port}
+    `);
+    console.log(badge,url);
   }
-
-  error({ message }) {
-    if (this.logging) {
-      process.stdout.write(chalk.red(`-> ${message}\n`));
-    }
-  }
-
-  koa() {
-    this.success({ message: 'Started Koa2, you can access "app" like you normally do' });
-    global.app = new Koa();
-  }
-
+  koa() { global.app = new Koa(); }
   staticFiles() {
-    if (this.useStaticFiles) {
-      this.success({ message: 'Added support for static files' });
-      const serve = require('koa-static');
-      app.use(serve(this.useStaticFiles.dir, this.useStaticFiles));
-    }
+    statik.set({
+      app,
+      dir: this.useStaticFiles.dir,
+      conf: this.useStaticFiles
+    });
   }
 
   bunYanLogger() {
-    if (this.useBunyanLogger) {
-      this.success({ message: 'Using BunYan Logger' });
-      const koaBunyanLogger = require('koa-bunyan-logger');
-      app.use(koaBunyanLogger({ name: 'In1t' }));
-      app.use(koaBunyanLogger.requestLogger());
-    }
+    app.use(require('koa-bunyan-logger')({ name: this.package.name }));
+    app.use(require('koa-bunyan-logger').requestLogger());
   }
 
   bodyParser() {
-    if (this.useBodyParser) {
-      this.success({ message: 'Using BodyParser' });
-      const bodyParser = require('koa-bodyparser');
-      app.use(bodyParser(this.useBodyParser));
-    }
+    return app.use(require('koa-bodyparser')(this.useBodyParser));
   }
 
   router() {
-    if (this.useKoaRouter) {
-      this.success({ message: 'Using Koa2 Router' });
       const router = require('koa-router')();
-      global.router = router;
       app.use(router.routes());
       app.use(router.allowedMethods());
-    }
+      global.router = router;
+      return router;
   }
 
   boot() {
     this.koa();
     this.staticFiles();
     this.router();
-    app.listen(this.port);
+    this.bunYanLogger();
+    app.listen(this.port, () => this.reportAppHaveStarted());
   }
 
 }
 
-module.exports = (options) => {
+module.exports = (options = {}) => {
   const In1t = new In1tKoa2(options);
   In1t.boot();
   return In1t;
