@@ -1,0 +1,74 @@
+{
+  "name": "init-koa2",
+  "version": "0.1.0",
+  "description": "Have your new koa2 project ready for development with all necessary modules",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/iMagdy/init-koa2.git"
+  },
+  "keywords": [
+    "koa2",
+    "init"
+  ],
+  "author": "Islam Magdy <islam@in1t.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iMagdy/init-koa2/issues"
+  },
+  "homepage": "https://github.com/iMagdy/init-koa2#readme",
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "graphql": "^0.8.2",
+    "graphql-server-koa": "^0.4.3",
+    "graphql-tools": "^0.8.4",
+    "gulp-bump": "^2.5.1",
+    "koa": "^2.0.0-alpha.7",
+    "koa-bodyparser": "^3.2.0",
+    "koa-bunyan-logger": "^1.3.0",
+    "koa-react-view": "^3.0.0",
+    "koa-router": "^7.0.1",
+    "koa-static": "^2.0.0",
+    "lodash": "^4.17.2",
+    "moment": "^2.15.2",
+    "pretty-error": "^2.0.2",
+    "react-toolbox": "^1.3.3"
+  },
+  "devDependencies": {
+    "babel-core": "6.x.x",
+    "babel-plugin-inline-import": "^2.0.4",
+    "babel-plugin-istanbul": "^3.0.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-root-slash-import": "1.x.x",
+    "chai": "3.x.x",
+    "eslint": "^3.12.2",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-config-airbnb-base": "^11.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-unicorn": "^1.0.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-bump": "^2.5.1",
+    "gulp-cached": "^1.1.1",
+    "gulp-changed": "^1.3.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-eslint": "^3.0.1",
+    "gulp-help": "^1.6.1",
+    "gulp-logger": "0.0.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-sourcemaps": "^1.9.1",
+    "husky": "^0.11.9",
+    "jsdoc": "^3.4.2",
+    "mocha": "2.x.x",
+    "pm2": "^2.2.3",
+    "pretty-error": "^2.0.2",
+    "react-addons-test-utils": "^15.0.0",
+    "shelljs": "^0.7.5",
+    "sinon": "1.17.x"
+  }
+}
